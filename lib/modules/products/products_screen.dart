@@ -77,7 +77,7 @@ class HomePage extends StatelessWidget {
                       //     )
                       FadeInImage(
                     placeholder: AssetImage('assets/images/MEBIB.gif'),
-                    image: AssetImage('assets/images/MEBIB.gif'),
+                    image: NetworkImage('${e.image}'),
                     width: double.infinity,
                     fit: BoxFit.cover,
                   ),
