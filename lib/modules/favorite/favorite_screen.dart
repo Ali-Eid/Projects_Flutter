@@ -1,56 +1,33 @@
 import 'package:buildcondition/buildcondition.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:softagi/bloc/shop/bloc/favorites/bloc/favourites_bloc.dart';
+// import 'package:softagi/bloc/shop/bloc/favorites/bloc/favourites_bloc.dart';
 import 'package:softagi/models/favourites_model.dart';
+import 'package:softagi/modules/products/cubit/home_cubit.dart';
 
 class FavoritePage extends StatelessWidget {
   const FavoritePage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => FavouritesBloc()..add(FavouritesGetEvent()),
-      child: BlocConsumer<FavouritesBloc, FavouritesState>(
-        listener: (context, state) {
-          // TODO: implement listener
-        },
-        builder: (context, state) {
-          return BuildCondition(
-              condition:
-                  BlocProvider.of<FavouritesBloc>(context).favouritesGET !=
-                      null,
-              fallback: (context) => Center(
-                    child: CircularProgressIndicator(),
-                  ),
-              builder: (context) => BlocProvider.of<FavouritesBloc>(context)
-                          .Favourites!
-                          .data!
-                          .total !=
-                      0
-                  ? state is GetFavoritesSuccessState1
-                      // state is DeleteFavoritesState
-                      // state is DeleteFavoritesState
-                      ? ListView.separated(
-                          itemBuilder: (ctxt, index) {
-                            return FavouritesBuild(
-                              model: state.model!.data!.data![index],
-                            );
-                          },
-                          separatorBuilder: (ctxt, index) => Divider(),
-                          itemCount: state.model!.data!.data!.length)
-                      : Center(
-                          child: CircularProgressIndicator(),
-                        )
-                  : Center(
-                      child: Text(
-                        'No Favourites Item in List',
-                        style: TextStyle(color: Colors.deepOrange),
-                      ),
-                    ));
-        },
-      ),
-    );
+    return BlocConsumer<HomeCubit, HomeState>(listener: (context, state) {
+      // TODO: implement listener
+    }, builder: (context, state) {
+      return BuildCondition(
+        builder: (context) => ListView.separated(
+            itemBuilder: (ctxt, index) {
+              return FavouritesBuild(
+                model: HomeCubit.get(context).favourites!.data!.data![index],
+              );
+            },
+            separatorBuilder: (ctxt, index) => Divider(),
+            itemCount: HomeCubit.get(context).favourites!.data!.data!.length),
+        condition: state is! ShopLoadingGetFavourites,
+        fallback: (context) => Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    });
   }
 }
 
@@ -91,12 +68,17 @@ class FavouritesBuild extends StatelessWidget {
               // Spacer(),
               IconButton(
                 onPressed: () {
-                  BlocProvider.of<FavouritesBloc>(context)
-                      .add(FavouritesDeleteEvent(id: model!.id));
-                  BlocProvider.of<FavouritesBloc>(context)
-                      .add(FavouritesGetEvent());
+                  HomeCubit.get(context).changeFavourite(model!.product!.id);
                 },
-                icon: Icon(Icons.favorite_rounded, color: Colors.deepOrange),
+                icon: HomeCubit.get(context).isFavourite[model!.id]
+                    ? Icon(
+                        Icons.favorite_outlined,
+                        color: Colors.red,
+                      )
+                    : Icon(
+                        Icons.favorite_border,
+                        color: Colors.red,
+                      ),
               )
             ],
           ),

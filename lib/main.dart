@@ -4,13 +4,14 @@ import 'package:softagi/bloc/shop/bloc/favorites/bloc/favourites_bloc.dart';
 import 'package:softagi/bloc/shop/bloc/shop_bloc.dart';
 
 import 'package:softagi/layout/home_layout.dart';
+import 'package:softagi/modules/products/cubit/home_cubit.dart';
 import 'package:softagi/shared/components/network/Dio.dart';
 import 'package:softagi/shared/components/network/cache.dart';
 import 'package:softagi/shared/components/network/styles/theme.dart';
 import 'package:softagi/shared/constants.dart';
 
 import 'layout/page_order.dart';
-import 'modules/login_page.dart';
+import 'modules/login/login_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -44,8 +45,14 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (context) => ShopBloc()..add(GetDataHome())),
+        // BlocProvider(create: (context) => ShopBloc()..add(GetDataHome())),
         // BlocProvider(create: (context) => FavouritesBloc()),
+        BlocProvider(
+            create: (context) => HomeCubit()
+              ..getDataHome()
+              ..getCategories()
+              ..getFavourites()
+              ..getProfile()),
       ],
       child: MaterialApp(
         theme: theme,

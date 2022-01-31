@@ -1,11 +1,12 @@
 import 'package:buildcondition/buildcondition.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:flutter/cupertino.dart';
+// import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:softagi/bloc/shop/bloc/shop_bloc.dart';
+// import 'package:softagi/bloc/shop/bloc/shop_bloc.dart';
 import 'package:softagi/models/category.dart';
 import 'package:softagi/models/home_model.dart';
+import 'package:softagi/modules/products/cubit/home_cubit.dart';
 import 'package:softagi/shared/components/components.dart';
 import 'package:softagi/shared/components/end_points.dart';
 import 'package:softagi/shared/components/network/Dio.dart';
@@ -15,40 +16,33 @@ class ProductsPage extends StatelessWidget {
   ProductsPage({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => ShopBloc()..add(GetDataHome()),
-      child: BlocConsumer<ShopBloc, ShopState>(
-        listener: (context, state) {
-          // if (state is GetProfileState) {
-          //   BlocProvider.of<ShopBloc>(context).add(GetDataHome());
-          // }
-          if (state is ChangeFavoritesSuccessState) {
-            if (state.fav!.status!) {
-              showToast(
-                  message: '${state.fav!.message}', state: ToastState.error);
-              state is ShopSuccessHomePage;
-            }
+    return BlocConsumer<HomeCubit, HomeState>(
+      listener: (context, state) {
+        if (state is ShopSuccessChangeFavourites) {
+          if (!(state.fav!.status!)) {
+            showToast(message: state.fav!.message, state: ToastState.error);
           }
-          // TODO: implement listener
-        },
-        builder: (context, state) {
-          return BuildCondition(
-            condition: BlocProvider.of<ShopBloc>(context).homeModel != null &&
-                BlocProvider.of<ShopBloc>(context).categories != null,
-            builder: (context) => state is ShopSuccessHomePage ||
-                    state is GetProfileState ||
-                    state is ChangeFavoritesSuccessState
-                ? HomePage(
-                    model: state.homeModel,
-                    category: state.categories,
-                  )
-                : Text('Null'),
-            fallback: (context) => Center(
-              child: CircularProgressIndicator(),
-            ),
-          );
-        },
-      ),
+          // showToast(message: state.fav!.message, state: ToastState.warning);
+        }
+      },
+      builder: (context, state) {
+        return BuildCondition(
+          condition: HomeCubit.get(context).homeModel != null &&
+              HomeCubit.get(context).category != null,
+          builder: (context) =>
+              // state is ShopSuccessHomePage ||
+              // state is GetProfileState ||
+              // state is ChangeFavoritesSuccessState
+              HomePage(
+            model: HomeCubit.get(context).homeModel,
+            category: HomeCubit.get(context).category,
+          ),
+          // : Text('Null'),
+          fallback: (context) => Center(
+            child: CircularProgressIndicator(),
+          ),
+        );
+      },
     );
   }
 }
@@ -77,7 +71,7 @@ class HomePage extends StatelessWidget {
                       //     )
                       FadeInImage(
                     placeholder: AssetImage('assets/images/MEBIB.gif'),
-                    image: AssetImage('assets/images/MEBIB.gif'),
+                    image: NetworkImage('${e.image}'),
                     width: double.infinity,
                     fit: BoxFit.cover,
                   ),
@@ -199,26 +193,16 @@ class CategoryItem extends StatelessWidget {
   }
 }
 
-class ProductWidget extends StatefulWidget {
+class ProductWidget extends StatelessWidget {
   ProductWidget({
     Key? key,
     required this.model,
     this.isFav,
   }) : super(key: key);
   Map<int?, bool?>? isFav = {};
-  final Products? model;
-
+  Products? model;
   @override
-  State<ProductWidget> createState() => _ProductWidgetState();
-}
-
-class _ProductWidgetState extends State<ProductWidget> {
   Widget build(BuildContext context) {
-    // print(BlocProvider.of<ShopBloc>(context).isFavorites);
-    // CacheHelper.saveData(
-    // key: 'image ${widget.model!.id}', value: '${widget.model!.image}');
-    var imageCash = CacheHelper.getData(key: 'image ${widget.model!.id}');
-
     return Column(
         // mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -241,12 +225,12 @@ class _ProductWidgetState extends State<ProductWidget> {
               // ),
               FadeInImage(
                 placeholder: AssetImage('assets/images/MEBIB.gif'),
-                image: NetworkImage('${imageCash}'),
+                image: NetworkImage('${model!.image}'),
                 //: AssetImage('assets/images/MEBIB.gif'),
                 width: double.infinity,
                 height: 120,
               ),
-              if (widget.model!.price != widget.model!.oldPrice)
+              if (model!.price != model!.oldPrice)
                 Container(
                   padding: EdgeInsets.symmetric(horizontal: 8),
                   color: Colors.deepOrange,
@@ -258,14 +242,14 @@ class _ProductWidgetState extends State<ProductWidget> {
             ],
           ),
           Text(
-            '${widget.model!.name!}',
+            '${model!.name!}',
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
           ),
           Row(
             children: [
               Text(
-                '${widget.model!.price.round()}',
+                '${model!.price.round()}',
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(color: Colors.deepOrange),
@@ -273,9 +257,9 @@ class _ProductWidgetState extends State<ProductWidget> {
               SizedBox(
                 width: 8,
               ),
-              if (widget.model!.price != widget.model!.oldPrice)
+              if (model!.price != model!.oldPrice)
                 Text(
-                  '${widget.model!.oldPrice.round()}',
+                  '${model!.oldPrice.round()}',
                   style: TextStyle(
                     color: Colors.grey,
                     fontSize: 14,
@@ -285,15 +269,9 @@ class _ProductWidgetState extends State<ProductWidget> {
               Spacer(),
               IconButton(
                 onPressed: () {
-                  setState(() {
-                    // print(BlocProvider.of<ShopBloc>(context).isFavorites);
-                    BlocProvider.of<ShopBloc>(context)
-                        .add(ChangeFavoritesEvent(id: widget.model!.id));
-                    //          print(BlocProvider.of<ShopBloc>(context).isFavorites);
-                  });
+                  HomeCubit.get(context).changeFavourite(model!.id);
                 },
-                icon: BlocProvider.of<ShopBloc>(context)
-                        .isFavorites[widget.model!.id]
+                icon: HomeCubit.get(context).isFavourite[model!.id]
                     ? Icon(
                         Icons.favorite_outlined,
                         color: Colors.red,

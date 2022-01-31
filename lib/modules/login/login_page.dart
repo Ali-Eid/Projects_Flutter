@@ -4,9 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:lottie/lottie.dart';
-import 'package:softagi/bloc/login_bloc.dart';
+// import 'package:softagi/bloc/login_bloc.dart';
 
 import 'package:softagi/layout/home_layout.dart';
+import 'package:softagi/modules/login/cubit/login_cubit.dart';
 import 'package:softagi/modules/sign_up.dart';
 import 'package:softagi/shared/components/components.dart';
 import 'package:softagi/shared/components/network/cache.dart';
@@ -29,16 +30,16 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return BlocProvider(
-      create: (context) => LoginBloc(),
-      child: BlocConsumer<LoginBloc, LoginState>(listener: (context, state) {
+      create: (context) => LoginCubit(),
+      child: BlocConsumer<LoginCubit, LoginState>(listener: (context, state) {
         if (state is SuccessStateLogIn) {
           if (state.loginmodel?.status == true) {
-            CacheHelper.saveData(
-                    key: 'token', value: state.loginmodel?.data!.token)
-                .then((value) {
-              Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(builder: (_) => HomeLayout()));
-            });
+            // CacheHelper.saveData(
+            //         key: 'token', value: state.loginmodel?.data!.token)
+            //     .then((value) {
+            Navigator.of(context).pushReplacement(
+                MaterialPageRoute(builder: (_) => HomeLayout()));
+
             showToast(
                 message: state.loginmodel?.message, state: ToastState.success);
           } else {
@@ -184,11 +185,9 @@ class _LoginPageState extends State<LoginPage> {
                                 child: Text('LOGIN'),
                                 onPressed: () {
                                   FormKey.currentState!.validate()
-                                      ? BlocProvider.of<LoginBloc>(context).add(
-                                          SubmitLoginEvent(
-                                              email: emailController.text,
-                                              password:
-                                                  passwordController.text))
+                                      ? LoginCubit.get(context).SubmitLogin(
+                                          email: emailController.text,
+                                          password: passwordController.text)
                                       : 'null';
                                 }),
                             fallback: (context) => Center(

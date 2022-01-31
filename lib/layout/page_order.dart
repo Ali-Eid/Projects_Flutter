@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-import 'package:softagi/modules/login_page.dart';
+import 'package:softagi/modules/login/login_page.dart';
+import 'package:softagi/modules/login/login_page.dart';
 import 'package:softagi/shared/components/network/cache.dart';
 
 class PageOrder extends StatefulWidget {

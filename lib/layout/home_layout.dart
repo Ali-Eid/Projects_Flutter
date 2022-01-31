@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:softagi/bloc/shop/bloc/shop_bloc.dart';
+// import 'package:softagi/bloc/shop/bloc/shop_bloc.dart';
 import 'package:softagi/layout/page_order.dart';
 import 'package:softagi/modules/categories/categories_screen.dart';
 import 'package:softagi/modules/favorite/favorite_screen.dart';
-import 'package:softagi/modules/login_page.dart';
+import 'package:softagi/modules/login/login_page.dart';
+import 'package:softagi/modules/products/cubit/home_cubit.dart';
 import 'package:softagi/modules/products/products_screen.dart';
 import 'package:softagi/modules/search/search_screen.dart';
 import 'package:softagi/modules/settings/settings_screen.dart';
@@ -31,12 +32,11 @@ class _HomeLayoutState extends State<HomeLayout> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<ShopBloc, ShopState>(
+    return BlocConsumer<HomeCubit, HomeState>(
       listener: (context, state) {
         // TODO: implement listener
       },
       builder: (context, state) {
-        
         return Scaffold(
           appBar: AppBar(
             backgroundColor: Colors.deepOrange,
