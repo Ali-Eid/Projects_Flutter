@@ -36,10 +36,9 @@ class HomeCubit extends Cubit<HomeState> {
   CategoriesModel? category;
 
   void getCategories() {
-    // emit(ShopLoadingHomePage());
     DioHelper.getData(url: GET_CATEGORY, token: token).then((value) {
       category = CategoriesModel.fromJson(value.data);
-      emit(ShopSuccessCategory(cat: category));
+      emit(ShopSuccessCategory());
     }).catchError((error) {
       emit(ShopErrorCategory(error: error));
     });

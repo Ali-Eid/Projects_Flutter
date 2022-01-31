@@ -18,10 +18,7 @@ class ShopErrorHomePage extends HomeState {
 
 class ShopLoadingHomePage extends HomeState {}
 
-class ShopSuccessCategory extends HomeState {
-  CategoriesModel? cat;
-  ShopSuccessCategory({this.cat});
-}
+class ShopSuccessCategory extends HomeState {}
 
 class ShopErrorCategory extends HomeState {
   String? error;

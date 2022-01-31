@@ -33,12 +33,8 @@ class CategoriesPage extends StatelessWidget {
 }
 
 class buildCategory extends StatelessWidget {
-  buildCategory({
-    Key? key,
-    required DataModel category,
-    // CategoriesModel? cat,
-  }) : super(key: key);
   DataModel? category;
+  buildCategory({this.category});
   @override
   Widget build(BuildContext context) {
     return Padding(
