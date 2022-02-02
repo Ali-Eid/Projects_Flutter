@@ -1,4 +1,5 @@
 import 'package:buildcondition/buildcondition.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:softagi/models/login_model.dart';
@@ -28,9 +29,12 @@ class SettingPage extends StatelessWidget {
                 width: MediaQuery.of(context).size.width * 0.35,
                 child: CircleAvatar(
                   radius: 30,
-                  child: Image(
-                    image: NetworkImage(
-                        '${HomeCubit.get(context).userModel!.data!.image}'),
+                  child: CachedNetworkImage(
+                    imageUrl:
+                        "${HomeCubit.get(context).userModel!.data!.image}",
+                    placeholder: (context, url) =>
+                        Image(image: AssetImage('assets/images/MEBIB.gif')),
+                    errorWidget: (context, url, error) => Icon(Icons.error),
                   ),
                 ),
               ),

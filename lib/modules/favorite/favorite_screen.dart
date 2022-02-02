@@ -1,4 +1,5 @@
 import 'package:buildcondition/buildcondition.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 // import 'package:softagi/bloc/shop/bloc/favorites/bloc/favourites_bloc.dart';
@@ -46,10 +47,16 @@ class FavouritesBuild extends StatelessWidget {
               Container(
                 width: 100,
                 height: 100,
-                child: FadeInImage(
-                  placeholder: AssetImage('assets/images/MEBIB.gif'),
-                  image: NetworkImage('${model!.product!.image}'),
+                child: CachedNetworkImage(
+                  imageUrl: "${model!.product!.image}",
+                  placeholder: (context, url) =>
+                      Image(image: AssetImage('assets/images/MEBIB.gif')),
+                  errorWidget: (context, url, error) => Icon(Icons.error),
                 ),
+                //  FadeInImage(
+                //   placeholder: AssetImage('assets/images/MEBIB.gif'),
+                //   image: NetworkImage('${model!.product!.image}'),
+                // ),
               ),
               Expanded(
                 child: Padding(
@@ -83,6 +90,9 @@ class FavouritesBuild extends StatelessWidget {
             ],
           ),
         ));
+  }
+}
+
     // return Padding(
     //   padding: const EdgeInsets.all(20.0),
     //   child: Column(
@@ -161,5 +171,4 @@ class FavouritesBuild extends StatelessWidget {
     //           ],
     //         ),
     //       ]),
-  }
-}
+ 

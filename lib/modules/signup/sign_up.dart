@@ -1,77 +1,47 @@
 import 'package:buildcondition/buildcondition.dart';
-// import 'package:conditional_builder/conditional_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:lottie/lottie.dart';
-// import 'package:softagi/bloc/login_bloc.dart';
-
 import 'package:softagi/layout/home_layout.dart';
-import 'package:softagi/modules/login/cubit/login_cubit.dart';
-import 'package:softagi/modules/signup/sign_up.dart';
+import 'package:softagi/modules/products/products_screen.dart';
+import 'package:softagi/modules/signup/cubit/signup_cubit.dart';
 import 'package:softagi/shared/components/components.dart';
-import 'package:softagi/shared/components/network/cache.dart';
+import 'package:softagi/shared/components/network/styles/theme.dart';
 
-class LoginPage extends StatefulWidget {
-  LoginPage({Key? key}) : super(key: key);
-
+class SignUp extends StatefulWidget {
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<SignUp> createState() => _SignUpState();
 }
 
-class _LoginPageState extends State<LoginPage> {
-  TextEditingController emailController = TextEditingController();
-  bool isSecure1 = true;
-  TextEditingController passwordController = TextEditingController();
-  Icon secureIcon = Icon(Icons.visibility, color: Colors.deepOrange);
+class _SignUpState extends State<SignUp> {
   var FormKey = GlobalKey<FormState>();
+  bool isSecure1 = true;
+  Icon secureIcon = Icon(Icons.visibility, color: Colors.deepOrange);
+  TextEditingController? emailController = TextEditingController();
+
+  TextEditingController? passwordController = TextEditingController();
+
+  TextEditingController? phoneController = TextEditingController();
+
+  TextEditingController? usernameController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    var size = MediaQuery.of(context).size;
-    return BlocProvider(
-      create: (context) => LoginCubit(),
-      child: BlocConsumer<LoginCubit, LoginState>(listener: (context, state) {
-        if (state is SuccessStateLogIn) {
-          if (state.loginmodel?.status == true) {
-            // CacheHelper.saveData(
-            //         key: 'token', value: state.loginmodel?.data!.token)
-            //     .then((value) {
+    return Scaffold(
+      appBar: AppBar(),
+      body: BlocConsumer<SignupCubit, SignupState>(
+        listener: (context, state) {
+          if (state is SuccessStateSignIn) {
+            // if (state.userModel!.status!) {
             Navigator.of(context).pushReplacement(
                 MaterialPageRoute(builder: (_) => HomeLayout()));
-
-            showToast(
-                message: state.loginmodel?.message, state: ToastState.success);
-          } else {
-            showToast(
-                message: state.loginmodel?.message, state: ToastState.error);
+            // } else {
+            // return null;
+            // }
           }
-        }
-        // TODO: implement listener
-      }, builder: (context, state) {
-        if (state is ErrorStateLogIn) {
-          return Scaffold(
-            body: Center(
-                child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  Icons.do_disturb_rounded,
-                  color: Colors.red,
-                  size: 30,
-                ),
-                Text('please check your connection',
-                    style: TextStyle(
-                        color: Colors.grey,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20)),
-              ],
-            )),
-          );
-        }
-        return Scaffold(
-            appBar: AppBar(),
-            body: Padding(
+          // TODO: implement listener
+        },
+        builder: (context, state) {
+          return Padding(
               padding: const EdgeInsets.all(30),
               child: Center(
                 child: SingleChildScrollView(
@@ -82,11 +52,28 @@ class _LoginPageState extends State<LoginPage> {
                         //Lottie.asset('assets/images/animations/login.json',
                         //  height: MediaQuery.of(context).size.height * 0.25),
                         Text(
-                          'Login',
+                          'SignUP',
                           style: Theme.of(context).textTheme.headline4,
                         ),
                         const SizedBox(
                           height: 30,
+                        ),
+                        defaultFormField(
+                          validator: (String? value) {
+                            if (value!.isEmpty) {
+                              return 'Please Enter Your Name';
+                            }
+                          },
+                          controller: usernameController,
+                          type: TextInputType.text,
+                          text: 'User Name',
+                          icon: const Icon(
+                            Icons.person,
+                            color: Colors.deepOrange,
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 15,
                         ),
                         defaultFormField(
                           validator: (String? value) {
@@ -141,36 +128,25 @@ class _LoginPageState extends State<LoginPage> {
                             color: Colors.deepOrange,
                           ),
                         ),
-                        Row(
-                          children: [
-                            Spacer(),
-                            TextButton(
-                                onPressed: () {},
-                                child: Text(
-                                  'Forgot Password?',
-                                  style: TextStyle(
-                                      color: Colors.deepOrange, fontSize: 12),
-                                ))
-                          ],
+                        const SizedBox(
+                          height: 15,
                         ),
-                        Row(
-                          children: [
-                            Text(
-                              "Don't have an account",
-                              style:
-                                  TextStyle(color: Colors.grey, fontSize: 20),
-                            ),
-                            TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (_) => SignUp()));
-                                },
-                                child: Text(
-                                  'Sign up',
-                                  style: TextStyle(
-                                      color: Colors.deepOrange, fontSize: 20),
-                                ))
-                          ],
+                        defaultFormField(
+                          validator: (String? value) {
+                            if (value!.isEmpty) {
+                              return 'Please Enter Your Phone Number';
+                            }
+                          },
+                          controller: phoneController,
+                          type: TextInputType.number,
+                          text: 'Phone Number',
+                          icon: const Icon(
+                            Icons.phone,
+                            color: Colors.deepOrange,
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 15,
                         ),
                         SizedBox(
                           height: 20,
@@ -180,14 +156,17 @@ class _LoginPageState extends State<LoginPage> {
                           height: 50,
                           //borderRadius: BorderRadius.circular(20)),
                           child: BuildCondition(
-                            condition: state is! LoadingStateLogIn,
+                            condition: state is! LoadingStateSignIn,
                             builder: (context) => defaultElevatedButton(
-                                child: Text('LOGIN'),
+                                child: Text('Sign UP'),
                                 onPressed: () {
                                   FormKey.currentState!.validate()
-                                      ? LoginCubit.get(context).SubmitLogin(
-                                          email: emailController.text,
-                                          password: passwordController.text)
+                                      ? SignupCubit.get(context).signUP(
+                                          username: usernameController!.text,
+                                          email: emailController!.text,
+                                          password: passwordController!.text,
+                                          phone: phoneController!.text,
+                                        )
                                       : 'null';
                                 }),
                             fallback: (context) => Center(
@@ -201,12 +180,9 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                 ),
-              ),
-            ));
-      }
-          // }
-
-          ),
+              ));
+        },
+      ),
     );
   }
 }

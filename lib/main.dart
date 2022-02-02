@@ -5,6 +5,8 @@ import 'package:softagi/bloc/shop/bloc/shop_bloc.dart';
 
 import 'package:softagi/layout/home_layout.dart';
 import 'package:softagi/modules/products/cubit/home_cubit.dart';
+import 'package:softagi/modules/search/cubit/search_cubit.dart';
+import 'package:softagi/modules/signup/cubit/signup_cubit.dart';
 import 'package:softagi/shared/components/network/Dio.dart';
 import 'package:softagi/shared/components/network/cache.dart';
 import 'package:softagi/shared/components/network/styles/theme.dart';
@@ -53,6 +55,8 @@ class MyApp extends StatelessWidget {
               ..getCategories()
               ..getFavourites()
               ..getProfile()),
+        BlocProvider(create: (context) => SignupCubit()),
+        // BlocProvider(create: (context) => SearchCubit()),
       ],
       child: MaterialApp(
         theme: theme,

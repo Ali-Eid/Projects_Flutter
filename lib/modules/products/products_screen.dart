@@ -11,6 +11,7 @@ import 'package:softagi/shared/components/components.dart';
 import 'package:softagi/shared/components/end_points.dart';
 import 'package:softagi/shared/components/network/Dio.dart';
 import 'package:softagi/shared/components/network/cache.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class ProductsPage extends StatelessWidget {
   ProductsPage({Key? key}) : super(key: key);
@@ -64,16 +65,18 @@ class HomePage extends StatelessWidget {
             items: model?.data!.banners!
                 .map(
                   (e) =>
-                      // Image(
-                      //       image: NetworkImage('${e.image}'),
-                      //       width: double.infinity,
-                      //       fit: BoxFit.cover,
-                      //     )
-                      FadeInImage(
-                    placeholder: AssetImage('assets/images/MEBIB.gif'),
-                    image: NetworkImage('${e.image}'),
-                    width: double.infinity,
+                      //  FadeInImage(
+                      //   placeholder: AssetImage('assets/images/MEBIB.gif'),
+                      //   image: NetworkImage('${e.image}'),
+                      //   width: double.infinity,
+                      //   fit: BoxFit.cover,
+                      // ),
+                      CachedNetworkImage(
                     fit: BoxFit.cover,
+                    width: double.infinity,
+                    imageUrl: "${e.image}",
+                    placeholder: (context, url) => CircularProgressIndicator(),
+                    errorWidget: (context, url, error) => Icon(Icons.error),
                   ),
                 )
                 .toList(),
@@ -166,12 +169,20 @@ class CategoryItem extends StatelessWidget {
           //   width: 100,
           //   fit: BoxFit.cover,
           // ),
-          FadeInImage(
-            placeholder: AssetImage('assets/images/MEBIB.gif'),
-            image: NetworkImage('${category!.image}'),
-            height: 100,
+          // FadeInImage(
+          //   placeholder: AssetImage('assets/images/MEBIB.gif'),
+          //   image: NetworkImage('${category!.image}'),
+          //   height: 100,
+          //   width: 100,
+          //   fit: BoxFit.cover,
+          // ),
+          CachedNetworkImage(
             width: 100,
-            fit: BoxFit.cover,
+            height: 100,
+            imageUrl: "'${category!.image}'",
+            placeholder: (context, url) =>
+                Image(image: AssetImage('assets/images/MEBIB.gif')),
+            errorWidget: (context, url, error) => Icon(Icons.error),
           ),
           Container(
             width: 100,
@@ -210,25 +221,20 @@ class ProductWidget extends StatelessWidget {
           Stack(
             alignment: Alignment.bottomLeft,
             children: [
-              // Image(
-              //   image: NetworkImage(widget.model!.image!),
-              //   width: double.infinity,
-              //   height: 200,
-              //   //            fit: BoxFit.cover,
-              // ),
-              // Image(
-              //   image: NetworkImage(
-              //       '${imageCash}'),
+              // FadeInImage(
+              //   placeholder: AssetImage('assets/images/MEBIB.gif'),
+              //   image: NetworkImage('${model!.image}'),
               //   //: AssetImage('assets/images/MEBIB.gif'),
               //   width: double.infinity,
               //   height: 120,
               // ),
-              FadeInImage(
-                placeholder: AssetImage('assets/images/MEBIB.gif'),
-                image: NetworkImage('${model!.image}'),
-                //: AssetImage('assets/images/MEBIB.gif'),
+              CachedNetworkImage(
                 width: double.infinity,
                 height: 120,
+                imageUrl: "${model!.image}",
+                placeholder: (context, url) =>
+                    Image(image: AssetImage('assets/images/MEBIB.gif')),
+                errorWidget: (context, url, error) => Icon(Icons.error),
               ),
               if (model!.price != model!.oldPrice)
                 Container(

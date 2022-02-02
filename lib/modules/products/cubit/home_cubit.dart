@@ -6,6 +6,7 @@ import 'package:softagi/models/favorites.dart';
 import 'package:softagi/models/favourites_model.dart';
 import 'package:softagi/models/home_model.dart';
 import 'package:softagi/models/login_model.dart';
+import 'package:softagi/models/search_model.dart';
 import 'package:softagi/shared/components/end_points.dart';
 import 'package:softagi/shared/components/network/Dio.dart';
 import 'package:softagi/shared/constants.dart';
