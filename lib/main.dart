@@ -5,6 +5,7 @@ import 'package:softagi/bloc/shop/bloc/shop_bloc.dart';
 
 import 'package:softagi/layout/home_layout.dart';
 import 'package:softagi/modules/products/cubit/home_cubit.dart';
+import 'package:softagi/modules/products_details/cubit/details_cubit.dart';
 import 'package:softagi/modules/search/cubit/search_cubit.dart';
 import 'package:softagi/modules/signup/cubit/signup_cubit.dart';
 import 'package:softagi/shared/components/network/Dio.dart';
@@ -21,6 +22,7 @@ void main() async {
   await CacheHelper.init();
   Widget widget;
   bool? onBoarding = CacheHelper.getData(key: 'onBoarding');
+  // String token = CacheHelper.getData(key: 'token');
 
   print(token);
   if (onBoarding != null) {
@@ -54,9 +56,9 @@ class MyApp extends StatelessWidget {
               ..getDataHome()
               ..getCategories()
               ..getFavourites()
-              ..getProfile()),
+              ..getProfile()
+              ..getCart()),
         BlocProvider(create: (context) => SignupCubit()),
-        // BlocProvider(create: (context) => SearchCubit()),
       ],
       child: MaterialApp(
         theme: theme,

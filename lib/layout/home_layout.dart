@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 // import 'package:softagi/bloc/shop/bloc/shop_bloc.dart';
 import 'package:softagi/layout/page_order.dart';
+import 'package:softagi/modules/cart/cart_screen.dart';
 import 'package:softagi/modules/categories/categories_screen.dart';
 import 'package:softagi/modules/favorite/favorite_screen.dart';
 import 'package:softagi/modules/login/login_page.dart';
@@ -41,6 +42,14 @@ class _HomeLayoutState extends State<HomeLayout> {
           appBar: AppBar(
             backgroundColor: Colors.deepOrange,
             actions: [
+              IconButton(
+                  onPressed: () {
+                    NavigateTo(context, widget: CartPage());
+                  },
+                  icon: Icon(
+                    Icons.shopping_cart,
+                    color: Colors.white,
+                  )),
               IconButton(
                   onPressed: () {
                     NavigateTo(context, widget: SearchPage());

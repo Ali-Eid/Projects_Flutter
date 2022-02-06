@@ -1,10 +1,13 @@
 import 'package:buildcondition/buildcondition.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 // import 'package:softagi/bloc/login_bloc.dart';
 // import 'package:softagi/bloc/shop/bloc/shop_bloc.dart';
 import 'package:softagi/models/category.dart';
+import 'package:softagi/modules/categories/categories_details/categories_details.dart';
 import 'package:softagi/modules/products/cubit/home_cubit.dart';
+import 'package:softagi/modules/products_details/cubit/details_cubit.dart';
 
 class CategoriesPage extends StatelessWidget {
   CategoriesPage({Key? key}) : super(key: key);
@@ -41,11 +44,19 @@ class buildCategory extends StatelessWidget {
       padding: const EdgeInsets.all(20.0),
       child: Row(
         children: [
-          Image(
+          // Image(
+          //   width: 80,
+          //   height: 80,
+          //   fit: BoxFit.cover,
+          //   image: NetworkImage('${category!.image}'),
+          // ),
+          CachedNetworkImage(
             width: 80,
             height: 80,
-            fit: BoxFit.cover,
-            image: NetworkImage('${category!.image}'),
+            imageUrl: "${category!.image}",
+            placeholder: (context, url) =>
+                Image(image: AssetImage('assets/images/MEBIB.gif')),
+            errorWidget: (context, url, error) => Icon(Icons.error),
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
@@ -56,7 +67,13 @@ class buildCategory extends StatelessWidget {
           ),
           Spacer(),
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              HomeCubit.get(context).getDataCategory(category!.id);
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (_) => CategoriesDetails(
+                        id: category!.id,
+                      )));
+            },
             icon: Icon(Icons.arrow_forward_ios),
           )
         ],

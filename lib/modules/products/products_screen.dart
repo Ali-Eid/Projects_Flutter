@@ -6,7 +6,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 // import 'package:softagi/bloc/shop/bloc/shop_bloc.dart';
 import 'package:softagi/models/category.dart';
 import 'package:softagi/models/home_model.dart';
+import 'package:softagi/modules/categories/categories_details/categories_details.dart';
 import 'package:softagi/modules/products/cubit/home_cubit.dart';
+import 'package:softagi/modules/products_details/product_details.dart';
 import 'package:softagi/shared/components/components.dart';
 import 'package:softagi/shared/components/end_points.dart';
 import 'package:softagi/shared/components/network/Dio.dart';
@@ -25,6 +27,12 @@ class ProductsPage extends StatelessWidget {
           }
           // showToast(message: state.fav!.message, state: ToastState.warning);
         }
+        // if (state is ShopChangeSuccessCartState) {
+        //   if (!(state.fav!.status!)) {
+        //     showToast(message: state.fav!.message, state: ToastState.error);
+        //   }
+        //   // showToast(message: state.fav!.message, state: ToastState.warning);
+        // }
       },
       builder: (context, state) {
         return BuildCondition(
@@ -75,7 +83,8 @@ class HomePage extends StatelessWidget {
                     fit: BoxFit.cover,
                     width: double.infinity,
                     imageUrl: "${e.image}",
-                    placeholder: (context, url) => CircularProgressIndicator(),
+                    placeholder: (context, url) =>
+                        Image(image: AssetImage('assets/images/MEBIB.gif')),
                     errorWidget: (context, url, error) => Icon(Icons.error),
                   ),
                 )
@@ -158,47 +167,43 @@ class CategoryItem extends StatelessWidget {
   DataModel? category;
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(borderRadius: BorderRadius.circular(20)),
-      child: Stack(
-        alignment: AlignmentDirectional.bottomCenter,
-        children: [
-          // Image(
-          //   image: NetworkImage('${category!.image}'),
-          //   height: 100,
-          //   width: 100,
-          //   fit: BoxFit.cover,
-          // ),
-          // FadeInImage(
-          //   placeholder: AssetImage('assets/images/MEBIB.gif'),
-          //   image: NetworkImage('${category!.image}'),
-          //   height: 100,
-          //   width: 100,
-          //   fit: BoxFit.cover,
-          // ),
-          CachedNetworkImage(
-            width: 100,
-            height: 100,
-            imageUrl: "'${category!.image}'",
-            placeholder: (context, url) =>
-                Image(image: AssetImage('assets/images/MEBIB.gif')),
-            errorWidget: (context, url, error) => Icon(Icons.error),
-          ),
-          Container(
-            width: 100,
-            color: Colors.black.withOpacity(0.8),
-            child: Text(
-              '${category!.name}',
-              style: TextStyle(
-                fontSize: 14,
-                color: Colors.white,
-              ),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              textAlign: TextAlign.center,
+    return InkWell(
+      onTap: () {
+        HomeCubit.get(context).getDataCategory(category!.id);
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (_) => CategoriesDetails(
+                  id: category!.id,
+                )));
+      },
+      child: Container(
+        decoration: BoxDecoration(borderRadius: BorderRadius.circular(20)),
+        child: Stack(
+          alignment: AlignmentDirectional.bottomCenter,
+          children: [
+            CachedNetworkImage(
+              width: 100,
+              height: 100,
+              imageUrl: "${category!.image}",
+              placeholder: (context, url) =>
+                  Image(image: AssetImage('assets/images/MEBIB.gif')),
+              errorWidget: (context, url, error) => Icon(Icons.error),
             ),
-          ),
-        ],
+            Container(
+              width: 100,
+              color: Colors.black.withOpacity(0.8),
+              child: Text(
+                '${category!.name}',
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Colors.white,
+                ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -214,93 +219,103 @@ class ProductWidget extends StatelessWidget {
   Products? model;
   @override
   Widget build(BuildContext context) {
-    return Column(
-        // mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Stack(
-            alignment: Alignment.bottomLeft,
-            children: [
-              // FadeInImage(
-              //   placeholder: AssetImage('assets/images/MEBIB.gif'),
-              //   image: NetworkImage('${model!.image}'),
-              //   //: AssetImage('assets/images/MEBIB.gif'),
-              //   width: double.infinity,
-              //   height: 120,
-              // ),
-              CachedNetworkImage(
-                width: double.infinity,
-                height: 120,
-                imageUrl: "${model!.image}",
-                placeholder: (context, url) =>
-                    Image(image: AssetImage('assets/images/MEBIB.gif')),
-                errorWidget: (context, url, error) => Icon(Icons.error),
-              ),
-              if (model!.price != model!.oldPrice)
-                Container(
-                  padding: EdgeInsets.symmetric(horizontal: 8),
-                  color: Colors.deepOrange,
-                  child: Text(
-                    'Discount',
-                    style: TextStyle(fontSize: 12, color: Colors.white),
-                  ),
-                )
-            ],
-          ),
-          Text(
-            '${model!.name!}',
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-          ),
-          Row(
-            children: [
-              Text(
-                '${model!.price.round()}',
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(color: Colors.deepOrange),
-              ),
-              SizedBox(
-                width: 8,
-              ),
-              if (model!.price != model!.oldPrice)
-                Text(
-                  '${model!.oldPrice.round()}',
-                  style: TextStyle(
-                    color: Colors.grey,
-                    fontSize: 14,
-                    decoration: TextDecoration.lineThrough,
-                  ),
+    return InkWell(
+      onTap: () {
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (_) => ProductDetails(
+                  id: model!.id,
+                )));
+      },
+      child: Column(
+          // mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Stack(
+              alignment: Alignment.bottomLeft,
+              children: [
+                // FadeInImage(
+                //   placeholder: AssetImage('assets/images/MEBIB.gif'),
+                //   image: NetworkImage('${model!.image}'),
+                //   //: AssetImage('assets/images/MEBIB.gif'),
+                //   width: double.infinity,
+                //   height: 120,
+                // ),
+                CachedNetworkImage(
+                  width: double.infinity,
+                  height: 120,
+                  imageUrl: "${model!.image}",
+                  placeholder: (context, url) =>
+                      Image(image: AssetImage('assets/images/MEBIB.gif')),
+                  errorWidget: (context, url, error) => Icon(Icons.error),
                 ),
-              Spacer(),
-              IconButton(
-                onPressed: () {
-                  HomeCubit.get(context).changeFavourite(model!.id);
-                },
-                icon: HomeCubit.get(context).isFavourite[model!.id]
-                    ? Icon(
-                        Icons.favorite_outlined,
-                        color: Colors.red,
-                      )
-                    : Icon(
-                        Icons.favorite_border,
-                        color: Colors.red,
-                      ),
-              )
-            ],
-          ),
-        ]);
+                if (model!.price != model!.oldPrice)
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 8),
+                    color: Colors.deepOrange,
+                    child: Text(
+                      'Discount',
+                      style: TextStyle(fontSize: 12, color: Colors.white),
+                    ),
+                  )
+              ],
+            ),
+            Text(
+              '${model!.name!}',
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
+            Row(
+              children: [
+                Text(
+                  '${model!.price.round()}',
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(color: Colors.deepOrange),
+                ),
+                SizedBox(
+                  width: 8,
+                ),
+                if (model!.price != model!.oldPrice)
+                  Text(
+                    '${model!.oldPrice.round()}',
+                    style: TextStyle(
+                      color: Colors.grey,
+                      fontSize: 14,
+                      decoration: TextDecoration.lineThrough,
+                    ),
+                  ),
+                Spacer(),
+                IconButton(
+                  onPressed: () {
+                    HomeCubit.get(context).changeFavourite(model!.id);
+                  },
+                  icon: HomeCubit.get(context).isFavourite[model!.id]
+                      ? Icon(
+                          Icons.favorite_outlined,
+                          color: Colors.red,
+                        )
+                      : Icon(
+                          Icons.favorite_border,
+                          color: Colors.red,
+                        ),
+                ),
+                IconButton(
+                  onPressed: () {
+                    HomeCubit.get(context).changeCart(model!.id);
+                  },
+                  icon: HomeCubit.get(context).isCart[model!.id]!
+                      ? Icon(
+                          Icons.shopping_cart,
+                          color: Colors.red,
+                        )
+                      : Icon(
+                          Icons.shopping_cart_outlined,
+                          color: Colors.red,
+                        ),
+                )
+              ],
+            ),
+          ]),
+    );
   }
 }
-// BuildCondition(
-//                     builder: (context) => Icon(
-//                       Icons.favorite_outlined,
-//                       color: Colors.red,
-//                     ),
-//                     condition: BlocProvider.of<FavouritesBloc>(context)
-//                         .isFavorites[model!.id],
-//                     fallback: (context) => Icon(
-//                       Icons.favorite_border,
-//                       color: Colors.red,
-//                     ),
-//                   )

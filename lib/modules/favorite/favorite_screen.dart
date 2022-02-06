@@ -77,7 +77,7 @@ class FavouritesBuild extends StatelessWidget {
                 onPressed: () {
                   HomeCubit.get(context).changeFavourite(model!.product!.id);
                 },
-                icon: true
+                icon: HomeCubit.get(context).isFavourite[model!.product!.id]
                     ? Icon(
                         Icons.favorite_outlined,
                         color: Colors.red,

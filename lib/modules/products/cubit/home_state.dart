@@ -54,3 +54,33 @@ class ShopSuccessGetProfile extends HomeState {
 }
 
 class ShopErrorGetProfile extends HomeState {}
+
+class ShopChangeCartState extends HomeState {}
+
+class ShopChangeSuccessCartState extends HomeState {
+  // Favorites? fav;
+  // ShopChangeSuccessCartState({this.fav});
+}
+
+class ShopChangeErrorCartState extends HomeState {
+  String? error;
+  ShopChangeErrorCartState({this.error});
+}
+
+class ShopLoadingGetCarts extends HomeState {}
+
+class ShopSuccessGetCarts extends HomeState {}
+
+class ShopErrorGetCarts extends HomeState {
+  String? error;
+  ShopErrorGetCarts({this.error});
+}
+
+class ShopLoadingDetailsCategory extends HomeState {}
+
+class ShopSuccessDetailsCategory extends HomeState {
+  // HomeModel? search;
+  // ShopSuccessSearch({this.search});
+}
+
+class ShopErrorDetailsCategory extends HomeState {}

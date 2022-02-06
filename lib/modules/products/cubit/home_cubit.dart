@@ -1,11 +1,15 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
+import 'package:softagi/models/cart_model.dart';
+import 'package:softagi/models/categories_details.dart';
+
 import 'package:softagi/models/category.dart';
 import 'package:softagi/models/favorites.dart';
 import 'package:softagi/models/favourites_model.dart';
 import 'package:softagi/models/home_model.dart';
 import 'package:softagi/models/login_model.dart';
+import 'package:softagi/models/product_details.dart';
 import 'package:softagi/models/search_model.dart';
 import 'package:softagi/shared/components/end_points.dart';
 import 'package:softagi/shared/components/network/Dio.dart';
@@ -20,13 +24,16 @@ class HomeCubit extends Cubit<HomeState> {
 
   HomeModel? homeModel;
   Map<int?, dynamic> isFavourite = {};
+  Map<int?, dynamic> isCart = {};
 
   void getDataHome() {
     emit(ShopLoadingHomePage());
     DioHelper.getData(url: HOME, token: token).then((value) {
       homeModel = HomeModel.fromJson(value.data);
       homeModel!.data!.products!.forEach((element) {
+        isCart.addAll({element.id: element.inCart});
         isFavourite.addAll({element.id: element.inFavorites});
+        // isCart.addAll({element.id: element.inCart});
       });
       emit(ShopSuccessHomePage());
     }).catchError((error) {
@@ -42,6 +49,23 @@ class HomeCubit extends Cubit<HomeState> {
       emit(ShopSuccessCategory());
     }).catchError((error) {
       emit(ShopErrorCategory(error: error));
+    });
+  }
+
+  CategoriesModel? modelCategory;
+  void getDataCategory(int? id) {
+    emit(ShopLoadingDetailsCategory());
+    DioHelper.getData(
+      url: 'categories/${id}',
+      // queryparameters: {'category_id': 44},
+      token: token,
+    ).then((value) {
+      modelCategory = CategoriesModel.fromJson(value.data);
+      print(modelCategory!.data!.data!.length);
+      emit(ShopSuccessDetailsCategory());
+    }).catchError((error) {
+      print("progress Error");
+      emit(ShopErrorDetailsCategory());
     });
   }
 
@@ -87,6 +111,41 @@ class HomeCubit extends Cubit<HomeState> {
       emit(ShopSuccessGetProfile(userModel: userModel));
     }).catchError((error) {
       emit(ShopErrorGetFavourites(error: error));
+    });
+  }
+
+  Favorites? cart;
+
+  void changeCart(int? prouductId) {
+    isCart[prouductId] = !isCart[prouductId];
+    emit(ShopChangeCartState());
+    DioHelper.postData(
+            url: GET_CARTS, data: {'product_id': prouductId}, token: token)
+        .then((value) {
+      cart = Favorites.fromJson(value.data);
+      if (!(cart!.status!)) {
+        isCart[prouductId] = !isCart[prouductId];
+        // getCart();
+      } else {
+        getCart();
+      }
+
+      emit(ShopChangeSuccessCartState());
+    }).catchError((error) {
+      isCart[prouductId] = !isCart[prouductId];
+      emit(ShopChangeErrorCartState());
+    });
+  }
+
+  CartModel? cartModel;
+
+  void getCart() {
+    emit(ShopLoadingGetCarts());
+    DioHelper.getData(url: GET_CARTS, token: token).then((value) {
+      cartModel = CartModel.fromJson(value.data);
+      emit(ShopSuccessGetCarts());
+    }).catchError((error) {
+      emit(ShopErrorGetCarts(error: error));
     });
   }
 }
