@@ -84,3 +84,12 @@ class ShopSuccessDetailsCategory extends HomeState {
 }
 
 class ShopErrorDetailsCategory extends HomeState {}
+
+class ShopLoadingDetails extends HomeState {}
+
+class ShopSuccessDetails extends HomeState {
+  // HomeModel? search;
+  // ShopSuccessSearch({this.search});
+}
+
+class ShopErrorDetails extends HomeState {}

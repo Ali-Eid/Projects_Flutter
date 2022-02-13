@@ -91,10 +91,10 @@ class Data {
 }
 
 class DataCategory {
-  int? id;
-  double? price;
-  double? oldPrice;
-  int? discount;
+  dynamic id;
+  dynamic price;
+  dynamic oldPrice;
+  dynamic discount;
   String? image;
   String? name;
   String? description;

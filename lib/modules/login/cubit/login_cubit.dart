@@ -19,7 +19,7 @@ class LoginCubit extends Cubit<LoginState> {
     var data = DioHelper.postData(
         url: LOGIN, data: {'email': email, 'password': password}).then((value) {
       loginModel = LoginModel.fromJson(value.data);
-      CacheHelper.saveData(key: 'token', value: '${loginModel!.data!.token}');
+      // CacheHelper.saveData(key: 'token', value: '${loginModel!.data!.token}');
       emit(SuccessStateLogIn(loginmodel: loginModel));
     }).catchError((error) {
       emit(ErrorStateLogIn(error: error));

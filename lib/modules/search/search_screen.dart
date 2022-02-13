@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:softagi/models/home_model.dart';
 import 'package:softagi/models/search_model.dart';
+import 'package:softagi/modules/products_details/product_details.dart';
 // import 'package:softagi/modules/products/cubit/home_cubit.dart';
 import 'package:softagi/modules/search/cubit/search_cubit.dart';
 import 'package:softagi/shared/components/components.dart';
@@ -96,48 +97,56 @@ class SearchBuild extends StatelessWidget {
     // TODO: implement build
     return Padding(
         padding: const EdgeInsets.all(20.0),
-        child: Container(
-          height: 120,
-          child: Row(
-            children: [
-              Container(
-                width: 100,
-                height: 100,
-                child: FadeInImage(
-                  placeholder: AssetImage('assets/images/MEBIB.gif'),
-                  image: NetworkImage('${model!.image}'),
-                ),
-              ),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 10),
-                  child: Text(
-                    '${model!.name}',
-                    style: TextStyle(
-                      fontSize: 14,
-                      //   fontWeight: FontWeight.bold,
-                    ),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
+        child: InkWell(
+          onTap: () {
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (_) => ProductDetails(
+                      id: model!.id,
+                    )));
+          },
+          child: Container(
+            height: 120,
+            child: Row(
+              children: [
+                Container(
+                  width: 100,
+                  height: 100,
+                  child: FadeInImage(
+                    placeholder: AssetImage('assets/images/MEBIB.gif'),
+                    image: NetworkImage('${model!.image}'),
                   ),
                 ),
-              ),
-              // Spacer(),
-              // IconButton(
-              //   onPressed: () {
-              //     HomeCubit.get(context).changeFavourite(model!.product!.id);
-              //   },
-              //   icon: true
-              //       ? Icon(
-              //           Icons.favorite_outlined,
-              //           color: Colors.red,
-              //         )
-              //       : Icon(
-              //           Icons.favorite_border,
-              //           color: Colors.red,
-              //         ),
-              // )
-            ],
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 10),
+                    child: Text(
+                      '${model!.name}',
+                      style: TextStyle(
+                        fontSize: 14,
+                        //   fontWeight: FontWeight.bold,
+                      ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                ),
+                // Spacer(),
+                // IconButton(
+                //   onPressed: () {
+                //     HomeCubit.get(context).changeFavourite(model!.product!.id);
+                //   },
+                //   icon: true
+                //       ? Icon(
+                //           Icons.favorite_outlined,
+                //           color: Colors.red,
+                //         )
+                //       : Icon(
+                //           Icons.favorite_border,
+                //           color: Colors.red,
+                //         ),
+                // )
+              ],
+            ),
           ),
         ));
   }

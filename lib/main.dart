@@ -22,7 +22,7 @@ void main() async {
   await CacheHelper.init();
   Widget widget;
   bool? onBoarding = CacheHelper.getData(key: 'onBoarding');
-  // String token = CacheHelper.getData(key: 'token');
+  token = CacheHelper.getData(key: 'token');
 
   print(token);
   if (onBoarding != null) {

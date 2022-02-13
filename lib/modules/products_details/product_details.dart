@@ -4,10 +4,11 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:softagi/modules/products/cubit/home_cubit.dart';
+
 import 'package:softagi/modules/products_details/cubit/details_cubit.dart';
 
 class ProductDetails extends StatefulWidget {
-  int? id;
+  dynamic id;
   ProductDetails({required this.id});
 
   @override
@@ -26,22 +27,6 @@ class _ProductDetailsState extends State<ProductDetails> {
           builder: (context, state) {
             // DetailsCubit.get(context).getData(id!);
             return Scaffold(
-              // floatingActionButton: FloatingActionButton.extended(
-              //     onPressed: () {
-              //       setState(() {
-              //         HomeCubit.get(context).changeCart(widget.id);
-              //       });
-              //     },
-              //     label: !HomeCubit.get(context).isCart[widget.id]
-              //         ? Row(
-              //             children: [
-              //               Text('Add To Cart'),
-              //               Icon(Icons.shopping_cart)
-              //             ],
-              //           )
-              //         : Row(
-              //             children: [Text('Added...')],
-              //           )),
               appBar: AppBar(),
               body: BuildCondition(
                 fallback: (context) => Center(
@@ -138,7 +123,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                                   });
                                 },
                                 child: HomeCubit.get(context).isCart[widget.id]!
-                                    ? Text('Added...')
+                                    ? Text('Remove From Cart ')
                                     : Row(
                                         children: [
                                           Text('Add To Cart'),

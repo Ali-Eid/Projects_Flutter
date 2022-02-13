@@ -16,14 +16,15 @@ class DetailsCubit extends Cubit<DetailsState> {
   static DetailsCubit get(context) => BlocProvider.of(context);
 
   ProductsDetails? model;
-  void getData(int id) {
+  void getData(dynamic id) {
     emit(ShopLoadingDetailsState());
     DioHelper.getData(url: 'products/${id}', token: token).then((value) {
       model = ProductsDetails.fromJson(value.data);
-      // print(model);
+      print(model!.data!.id);
       emit(ShopSuccessDetailsState());
     }).catchError((error) {
       // print("progress Error");
+      print(error.toString());
       emit(ShopErrorDetailsState());
     });
   }

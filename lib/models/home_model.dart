@@ -84,10 +84,10 @@ class Banners {
 }
 
 class Products {
-  int? id;
-  var price;
-  var oldPrice;
-  var discount;
+  dynamic id;
+  dynamic price;
+  dynamic oldPrice;
+  dynamic discount;
   String? image;
   String? name;
   String? description;

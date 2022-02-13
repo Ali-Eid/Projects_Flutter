@@ -5,7 +5,9 @@ import 'package:softagi/layout/home_layout.dart';
 import 'package:softagi/modules/products/products_screen.dart';
 import 'package:softagi/modules/signup/cubit/signup_cubit.dart';
 import 'package:softagi/shared/components/components.dart';
+import 'package:softagi/shared/components/network/cache.dart';
 import 'package:softagi/shared/components/network/styles/theme.dart';
+import 'package:softagi/shared/constants.dart';
 
 class SignUp extends StatefulWidget {
   @override
@@ -31,14 +33,23 @@ class _SignUpState extends State<SignUp> {
       body: BlocConsumer<SignupCubit, SignupState>(
         listener: (context, state) {
           if (state is SuccessStateSignIn) {
-            // if (state.userModel!.status!) {
-            Navigator.of(context).pushReplacement(
-                MaterialPageRoute(builder: (_) => HomeLayout()));
-            // } else {
-            // return null;
-            // }
+            if (state.userModel!.status == true) {
+              CacheHelper.saveData(
+                      key: 'token', value: state.userModel!.data!.token)
+                  .then((value) {
+                token = CacheHelper.getData(key: 'token');
+                Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(builder: (_) => HomeLayout()));
+              }); // if (state.userModel!.status!) {
+
+              // Navigator.of(context).pushReplacement(
+              //     MaterialPageRoute(builder: (_) => HomeLayout()));
+              // } else {
+              // return null;
+              // }
+            }
+            // TODO: implement listener
           }
-          // TODO: implement listener
         },
         builder: (context, state) {
           return Padding(

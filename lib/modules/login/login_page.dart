@@ -11,6 +11,7 @@ import 'package:softagi/modules/login/cubit/login_cubit.dart';
 import 'package:softagi/modules/signup/sign_up.dart';
 import 'package:softagi/shared/components/components.dart';
 import 'package:softagi/shared/components/network/cache.dart';
+import 'package:softagi/shared/constants.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({Key? key}) : super(key: key);
@@ -34,12 +35,13 @@ class _LoginPageState extends State<LoginPage> {
       child: BlocConsumer<LoginCubit, LoginState>(listener: (context, state) {
         if (state is SuccessStateLogIn) {
           if (state.loginmodel?.status == true) {
-            // CacheHelper.saveData(
-            //         key: 'token', value: state.loginmodel?.data!.token)
-            //     .then((value) {
-            Navigator.of(context).pushReplacement(
-                MaterialPageRoute(builder: (_) => HomeLayout()));
-
+            CacheHelper.saveData(
+                    key: 'token', value: state.loginmodel?.data!.token)
+                .then((value) {
+              token = CacheHelper.getData(key: 'token');
+              Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(builder: (_) => HomeLayout()));
+            });
             showToast(
                 message: state.loginmodel?.message, state: ToastState.success);
           } else {

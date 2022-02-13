@@ -145,7 +145,21 @@ class HomeCubit extends Cubit<HomeState> {
       cartModel = CartModel.fromJson(value.data);
       emit(ShopSuccessGetCarts());
     }).catchError((error) {
+      print(error.toString());
       emit(ShopErrorGetCarts(error: error));
     });
   }
+
+  // ProductsDetails? modelProduct;
+  // void getDataProducts(int? id) {
+  //   emit(ShopLoadingDetails());
+  //   DioHelper.getData(url: 'products/${id}', token: token).then((value) {
+  //     modelProduct = ProductsDetails.fromJson(value.data);
+  //     print(modelProduct!.data!.id);
+  //     emit(ShopSuccessDetails());
+  //   }).catchError((error) {
+  //     // print("progress Error");
+  //     emit(ShopErrorDetails());
+  //   });
+  // }
 }

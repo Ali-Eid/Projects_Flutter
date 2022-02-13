@@ -81,7 +81,7 @@ class Data {
 }
 
 class DBProducts {
-  int? id;
+  dynamic id;
   var price;
   var oldPrice;
   var discount;

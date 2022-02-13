@@ -24,10 +24,10 @@ class ProductsDetails {
 }
 
 class DataProducts {
-  int? id;
-  int? price;
-  int? oldPrice;
-  int? discount;
+  dynamic id;
+  dynamic price;
+  dynamic oldPrice;
+  dynamic discount;
   String? image;
   String? name;
   String? description;

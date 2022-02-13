@@ -91,7 +91,7 @@ class Data {
 }
 
 class DataModel {
-  int? id;
+  dynamic id;
   String? name;
   String? image;
 

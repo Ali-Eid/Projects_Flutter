@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 // import 'package:softagi/bloc/shop/bloc/favorites/bloc/favourites_bloc.dart';
 import 'package:softagi/models/favourites_model.dart';
 import 'package:softagi/modules/products/cubit/home_cubit.dart';
+import 'package:softagi/modules/products_details/product_details.dart';
 
 class FavoritePage extends StatelessWidget {
   const FavoritePage({Key? key}) : super(key: key);
@@ -38,58 +39,66 @@ class FavouritesBuild extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Container(
-          height: 120,
-          child: Row(
-            children: [
-              Container(
-                width: 100,
-                height: 100,
-                child: CachedNetworkImage(
-                  imageUrl: "${model!.product!.image}",
-                  placeholder: (context, url) =>
-                      Image(image: AssetImage('assets/images/MEBIB.gif')),
-                  errorWidget: (context, url, error) => Icon(Icons.error),
+    return InkWell(
+      onTap: () {
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (_) => ProductDetails(
+                  id: model!.id,
+                )));
+      },
+      child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Container(
+            height: 120,
+            child: Row(
+              children: [
+                Container(
+                  width: 100,
+                  height: 100,
+                  child: CachedNetworkImage(
+                    imageUrl: "${model!.product!.image}",
+                    placeholder: (context, url) =>
+                        Image(image: AssetImage('assets/images/MEBIB.gif')),
+                    errorWidget: (context, url, error) => Icon(Icons.error),
+                  ),
+                  //  FadeInImage(
+                  //   placeholder: AssetImage('assets/images/MEBIB.gif'),
+                  //   image: NetworkImage('${model!.product!.image}'),
+                  // ),
                 ),
-                //  FadeInImage(
-                //   placeholder: AssetImage('assets/images/MEBIB.gif'),
-                //   image: NetworkImage('${model!.product!.image}'),
-                // ),
-              ),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 10),
-                  child: Text(
-                    '${model!.product!.name}',
-                    style: TextStyle(
-                      fontSize: 14,
-                      //   fontWeight: FontWeight.bold,
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 10),
+                    child: Text(
+                      '${model!.product!.name}',
+                      style: TextStyle(
+                        fontSize: 14,
+                        //   fontWeight: FontWeight.bold,
+                      ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
                     ),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
-              ),
-              // Spacer(),
-              IconButton(
-                onPressed: () {
-                  HomeCubit.get(context).changeFavourite(model!.product!.id);
-                },
-                icon: HomeCubit.get(context).isFavourite[model!.product!.id]
-                    ? Icon(
-                        Icons.favorite_outlined,
-                        color: Colors.red,
-                      )
-                    : Icon(
-                        Icons.favorite_border,
-                        color: Colors.red,
-                      ),
-              )
-            ],
-          ),
-        ));
+                // Spacer(),
+                IconButton(
+                  onPressed: () {
+                    HomeCubit.get(context).changeFavourite(model!.product!.id);
+                  },
+                  icon: HomeCubit.get(context).isFavourite[model!.product!.id]
+                      ? Icon(
+                          Icons.favorite_outlined,
+                          color: Colors.red,
+                        )
+                      : Icon(
+                          Icons.favorite_border,
+                          color: Colors.red,
+                        ),
+                )
+              ],
+            ),
+          )),
+    );
   }
 }
 
