@@ -38,17 +38,16 @@ class _SignUpState extends State<SignUp> {
                       key: 'token', value: state.userModel!.data!.token)
                   .then((value) {
                 token = CacheHelper.getData(key: 'token');
-                Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(builder: (_) => HomeLayout()));
-              }); // if (state.userModel!.status!) {
-
-              // Navigator.of(context).pushReplacement(
-              //     MaterialPageRoute(builder: (_) => HomeLayout()));
-              // } else {
-              // return null;
-              // }
+                // Navigator.of(context).pushReplacement(
+                //     MaterialPageRoute(builder: (_) => HomeLayout()));
+                Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(builder: (_) => HomeLayout()),
+                    (route) => false);
+              });
+            } else {
+              showToast(
+                  message: state.userModel!.message, state: ToastState.error);
             }
-            // TODO: implement listener
           }
         },
         builder: (context, state) {

@@ -39,8 +39,11 @@ class _LoginPageState extends State<LoginPage> {
                     key: 'token', value: state.loginmodel?.data!.token)
                 .then((value) {
               token = CacheHelper.getData(key: 'token');
-              Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(builder: (_) => HomeLayout()));
+              // Navigator.of(context).pushReplacement(
+              //     MaterialPageRoute(builder: (_) => HomeLayout()));
+              Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute(builder: (_) => HomeLayout()),
+                  (route) => false);
             });
             showToast(
                 message: state.loginmodel?.message, state: ToastState.success);

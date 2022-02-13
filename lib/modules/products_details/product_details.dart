@@ -136,6 +136,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                           height: 10,
                         ),
                         Container(
+                          width: double.infinity,
                           decoration: BoxDecoration(
                               border: Border.all(
                                   width: 1, color: Colors.deepOrange),
