@@ -1,6 +1,6 @@
 class ProductsDetails {
   bool? status;
-  Null? message;
+  String? message;
   DataProducts? data;
 
   ProductsDetails({this.status, this.message, this.data});
@@ -28,12 +28,12 @@ class DataProducts {
   dynamic price;
   dynamic oldPrice;
   dynamic discount;
-  String? image;
-  String? name;
-  String? description;
+  dynamic image;
+  dynamic name;
+  dynamic description;
   bool? inFavorites;
   bool? inCart;
-  List<String>? images;
+  List<dynamic>? images;
 
   DataProducts(
       {this.id,

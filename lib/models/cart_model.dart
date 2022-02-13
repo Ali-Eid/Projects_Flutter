@@ -77,7 +77,7 @@ class CartItems {
 }
 
 class Product {
-  dynamic id;
+  int? id;
   dynamic price;
   dynamic oldPrice;
   dynamic discount;

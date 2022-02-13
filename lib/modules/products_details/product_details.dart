@@ -92,7 +92,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                                   color: Colors.deepOrange, fontSize: 20),
                             ),
                             Text(
-                              '${DetailsCubit.get(context).model!.data!.price!.round()}',
+                              '${DetailsCubit.get(context).model!.data!.price!.round().toString()}',
                               style: TextStyle(
                                   color: Colors.deepOrange, fontSize: 20),
                             ),

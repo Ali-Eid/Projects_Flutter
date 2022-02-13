@@ -61,7 +61,7 @@ class CartBuild extends StatelessWidget {
       onTap: () {
         Navigator.of(context).push(MaterialPageRoute(
             builder: (_) => ProductDetails(
-                  id: model!.id,
+                  id: model!.product!.id,
                 )));
       },
       child: Padding(
